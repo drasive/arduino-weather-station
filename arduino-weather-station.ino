@@ -30,7 +30,6 @@ const char* THINGSPEAK_API_KEY = "";		// ThingSpeak write API key (secret)
 
 // Initialization
 DHT weatherSensor = DHT(DHT_PIN, DHT_TYPE);
-bool networkConnected = false;
 
 
 // Main
@@ -67,12 +66,12 @@ void loop() {
 	if (LOG_DATA && sensorReadingSuccessful) {
 		Serial.println("Logging data");
 
-		if (!networkConnected) {
-			networkConnected = connectToWirelessNetwork();
+		if (WiFi.status() != WL_CONNECTED) {
+			connectToWirelessNetwork();
 		}
 
 		bool dataLoggingSuccessful = false;
-		if (networkConnected) {
+		if (WiFi.status() == WL_CONNECTED) {
 			dataLoggingSuccessful = writeToThingSpeak(temperature, humidity);
 		}
 
@@ -177,7 +176,7 @@ bool writeToThingSpeak(float temperature, float humidity) {
 	return false;
 }
 
-bool connectToWirelessNetwork() {
+void connectToWirelessNetwork() {
 	const uint8_t CONNECTION_ATTEMPTS = 3;
 	const uint8_t CONNECTION_INTERVAL = 10 * 1000;
 
@@ -190,7 +189,7 @@ bool connectToWirelessNetwork() {
 		Serial.print(WLAN_SSID);
 		Serial.println("\" failed: No WLAN shield on device");
 
-		return false;
+		return;
 	}
 
 	uint8_t networkConnectionStatus = WL_IDLE_STATUS;
@@ -209,7 +208,7 @@ bool connectToWirelessNetwork() {
 			Serial.println(" dBm)");
 
 			WiFi.maxLowPowerMode();
-			return true;
+			return;
 		}
 
 		// Wait in between attempts
@@ -222,7 +221,6 @@ bool connectToWirelessNetwork() {
 	Serial.print(WLAN_SSID);
 	Serial.print("\" failed: Error ");
 	Serial.println(networkConnectionStatus);
-	return false;
 }
 
 
