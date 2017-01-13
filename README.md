@@ -40,6 +40,8 @@ THINGSPEAK_API_KEY    | char*    | -               | ThingSpeak write API key (s
 
 ![Circuit](/circuit/Circuit.png)
 
+[Breadboard Version](/circuit/Breadboard.png)
+
 ## Documentation
 ### Status LED
 The following states are communicated using the onboard LED:
