@@ -2,12 +2,20 @@
 
 Arduino sketch for regularly logging temperature and humidity data to a private cloud.
 
-## Hardware
-![Circuit](/circuit/Circuit.png)
+## Example Output
+```
+arduino-weather-station v1.0.0 (https://github.com/drasive/arduino-weather-station)
+Initialization successful
 
-- 1x Arduino MKR1000 (WiFi101 Firmware v19.4.4)
-- 1x DHT22 sensor
-- 1x Resistor 10 kR
+Reading sensor data
+Reading sensor data successful (temperature: 22.30°C, humidity: 49.80%)
+Logging data
+Connecting to WLAN "Arduino (2.4 GHz)"
+Connecting to WLAN "Arduino (2.4 GHz)" successful (192.168.0.228, -69 dBm)
+Writing to ThingSpeak #12345
+Writing to ThingSpeak #12345 successful
+Logging data successful
+```
 
 ## Configuration
 The configuration values are found at the top of [arduino-weather-station.ino](/src/arduino-weather-station.ino).  
@@ -25,20 +33,12 @@ WLAN_PASSWORD         | char*    | -               | WLAN Password (secret)
 THINGSPEAK_CHANNEL_ID | uint32_t | -               | ThingSpeak channel ID
 THINGSPEAK_API_KEY    | char*    | -               | ThingSpeak write API key (secret)
 
-## Example Output
-```
-arduino-weather-station v1.0.0 (https://github.com/drasive/arduino-weather-station)
-Initialization successful
+## Hardware
+- 1x Arduino MKR1000 (WiFi101 Firmware v19.4.4)
+- 1x DHT22 sensor
+- 1x Resistor 10 kR
 
-Reading sensor data
-Reading sensor data successful (temperature: 22.30°C, humidity: 49.80%)
-Logging data
-Connecting to WLAN "Arduino (2.4 GHz)"
-Connecting to WLAN "Arduino (2.4 GHz)" successful (192.168.0.228, -69 dBm)
-Writing to ThingSpeak #12345
-Writing to ThingSpeak #12345 successful
-Logging data successful
-```
+![Circuit](/circuit/Circuit.png)
 
 ## Documentation
 ### Status LED
