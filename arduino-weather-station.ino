@@ -100,7 +100,7 @@ bool readSensorData(float* temperature, float* humidity) {
 
     Serial.println("Reading sensor data");
 
-    for (uint8_t sensorReadAttempt = 0; sensorReadAttempt <= SENSOR_READING_ATTEMPTS; sensorReadAttempt++) {
+    for (uint8_t sensorReadAttempt = 0; sensorReadAttempt < SENSOR_READING_ATTEMPTS; sensorReadAttempt++) {
         *temperature = weatherSensor.readTemperature(false, false);
         *humidity = weatherSensor.readHumidity(false);
 
@@ -146,7 +146,7 @@ bool writeToThingSpeak(float temperature, float humidity) {
     Serial.println(THINGSPEAK_CHANNEL_ID);
 
     uint8_t writeStatus = 0;
-    for (int dataLoggingAttempt = 0; dataLoggingAttempt <= DATA_LOGGING_ATTEMPTS; dataLoggingAttempt++) {
+    for (int dataLoggingAttempt = 0; dataLoggingAttempt < DATA_LOGGING_ATTEMPTS; dataLoggingAttempt++) {
         WiFiClient client;
         ThingSpeak.begin(client);
 
@@ -193,7 +193,7 @@ void connectToWirelessNetwork() {
     }
 
     uint8_t networkConnectionStatus = WL_IDLE_STATUS;
-    for (int connectionAttempt = 0; connectionAttempt <= CONNECTION_ATTEMPTS; connectionAttempt++) {
+    for (int connectionAttempt = 0; connectionAttempt < CONNECTION_ATTEMPTS; connectionAttempt++) {
         networkConnectionStatus = WiFi.begin(WLAN_SSID, WLAN_PASSWORD);
 
         if (networkConnectionStatus == WL_CONNECTED) {
