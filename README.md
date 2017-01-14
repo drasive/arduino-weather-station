@@ -2,7 +2,7 @@
 
 Arduino sketch for regularly logging temperature and humidity data to a private cloud.
 
-## Example Output
+## Example Output (Serial)
 ```
 arduino-weather-station v1.0.0 (https://github.com/drasive/arduino-weather-station)
 Initialization successful
@@ -38,9 +38,9 @@ THINGSPEAK_API_KEY    | char*    | -               | ThingSpeak write API key (s
 - 1x DHT22 sensor
 - 1x Resistor 10 kR
 
-![Circuit](/circuit/Circuit.png)
-
 [Breadboard Version](/circuit/Breadboard.png)
+
+![Circuit](/circuit/Circuit.png)
 
 ## Documentation
 ### Status LED
@@ -50,7 +50,7 @@ The following states are communicated using the onboard LED:
 - Active:       LED is on (reading or logging sensor values)
 - Idle:         LED is off (between updates)
 
-### Data Logging (ThingSpeak )
+### Data Logging (ThingSpeak)
 If turned on (`LOG_DATA`), the temperature and humidity readings will be send to your [ThingSpeak](https://thingspeak.com/) account.  
 This requires an active network connection (`WLAN_SSID` and `WLAN_PASSWORD`) and a ThingSpeak channel (`THINGSPEAK_CHANNEL_ID` and `THINGSPEAK_API_KEY`) to be configured with the temparature as field 1 and the humidity as field 2.
 

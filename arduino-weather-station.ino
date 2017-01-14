@@ -105,17 +105,7 @@ bool readSensorData(float* temperature, float* humidity) {
         *humidity = weatherSensor.readHumidity(false);
 
         bool isTemperatureValid = !isnan(*temperature) && *temperature >= -40.0 && *temperature <= 80.0;
-        if (!isTemperatureValid) {
-            Serial.print("Reading valid temperature failed: ");
-            Serial.print(*temperature);
-            Serial.println(")");
-        }
         bool isHumidityValid = !isnan(*humidity) && *humidity >= 0.0 && *humidity <= 100.0;
-        if (!isHumidityValid) {
-            Serial.print("Reading valid humidity failed: ");
-            Serial.print(*humidity);
-            Serial.println(")");
-        }
 
         if (isTemperatureValid && isHumidityValid) {
             Serial.print("Reading sensor data successful (temperature: ");
@@ -125,6 +115,15 @@ bool readSensorData(float* temperature, float* humidity) {
             Serial.println("%)");
 
             return true;
+        }
+
+        if (!isTemperatureValid) {
+            Serial.print("Reading valid temperature failed: ");
+            Serial.println(*temperature);
+        }
+        if (!isHumidityValid) {
+            Serial.print("Reading valid humidity failed: ");
+            Serial.println(*humidity);
         }
 
         // Wait in between attempts
@@ -163,16 +162,17 @@ bool writeToThingSpeak(float temperature, float humidity) {
             return true;
         }
 
+        Serial.print("Writing to ThingSpeak #");
+        Serial.print(THINGSPEAK_CHANNEL_ID);
+        Serial.print(" failed: Error ");
+        Serial.println(writeStatus);
+
         // Wait in between attempts
         if (dataLoggingAttempt + 1 < DATA_LOGGING_ATTEMPTS) {
             delay(DATA_LOGGING_INTERVAL);
         }
     }
 
-    Serial.print("Writing to ThingSpeak #");
-    Serial.print(THINGSPEAK_CHANNEL_ID);
-    Serial.print(" failed: Error ");
-    Serial.println(writeStatus);
     return false;
 }
 
@@ -211,16 +211,16 @@ void connectToWirelessNetwork() {
             return;
         }
 
+        Serial.print("Connecting to WLAN \"");
+        Serial.print(WLAN_SSID);
+        Serial.print("\" failed: Error ");
+        Serial.println(networkConnectionStatus);
+
         // Wait in between attempts
         if (connectionAttempt + 1 < CONNECTION_ATTEMPTS) {
             delay(CONNECTION_INTERVAL);
         }
     }
-
-    Serial.print("Connecting to WLAN \"");
-    Serial.print(WLAN_SSID);
-    Serial.print("\" failed: Error ");
-    Serial.println(networkConnectionStatus);
 }
 
 
