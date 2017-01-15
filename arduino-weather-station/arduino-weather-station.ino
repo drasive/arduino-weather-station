@@ -47,7 +47,7 @@ void setup() {
     weatherSensor.begin();
 
     blinkLedSynchronous(statusLed, 3); // Device initialized
-    Serial.println("arduino-weather-station v1.1.0 (https://github.com/drasive/arduino-weather-station)");
+    Serial.println("arduino-weather-station v1.2.0 (https://github.com/drasive/arduino-weather-station)");
     Serial.println("Initialization successful\n");
     delay(1 * 1000);
 }
