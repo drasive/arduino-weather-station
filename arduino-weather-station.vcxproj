@@ -82,7 +82,11 @@
     <ClInclude Include="DHT.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="LED.h" />
     <ClInclude Include="__vm\.arduino-weather-station.vsarduino.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="LED.cpp" />
   </ItemGroup>
   <PropertyGroup>
     <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>

@@ -11,7 +11,7 @@
 #include <WiFi101.h>
 #include <DHT.h>
 #include <ThingSpeak.h>
-
+#include "LED.h"
 
 // Configuration
 // TODO: Find way to remove sensitive data from code file
@@ -29,13 +29,13 @@ const char* THINGSPEAK_API_KEY = "";      // ThingSpeak write API key (secret)
 
 
 // Initialization
+LED statusLed = LED(LED_PIN);
 DHT weatherSensor = DHT(DHT_PIN, DHT_TYPE);
 
 
 // Main
 void setup() {
-    pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, LOW); // Device initializing
+    statusLed.turnOff(); // Device initializing
 
     // Initialize serial port
     Serial.begin(9600);
@@ -46,15 +46,15 @@ void setup() {
     // Initialize weather sensor
     weatherSensor.begin();
 
-    blinkLed(LED_PIN, 3); // Device initialized
+    blinkLedSynchronous(statusLed, 3); // Device initialized
     Serial.println("arduino-weather-station v1.1.0 (https://github.com/drasive/arduino-weather-station)");
     Serial.println("Initialization successful\n");
     delay(1 * 1000);
 }
 
 void loop() {
-    digitalWrite(LED_PIN, HIGH); // Device active
-	uint32_t updateStart = millis();
+    statusLed.turnOn(); // Device active
+    uint32_t updateStart = millis();
 
     // Read sensor data
     float temperature = NAN;
@@ -86,7 +86,7 @@ void loop() {
 
     Serial.println();
     // TODO: Introduce "failing" status when last update was not successful
-    digitalWrite(LED_PIN, LOW); // Device idle
+	statusLed.turnOff(); // Device idle
 
     // Wait for next update
 	uint32_t updateEnd = millis();
@@ -95,8 +95,9 @@ void loop() {
 		updateDuration = updateEnd - updateStart;
 	}
 	else {
-		// Overflow occured
-		// Assuming a single update takes less than UINT32_MAX milliseconds
+		// millis() overflow occured
+		// Code assumes that a single update takes less than UINT32_MAX milliseconds
+		// Warning: This code path has never been tested
 		updateDuration = (UINT32_MAX - updateStart) + updateEnd;
 	}
 	uint32_t waitTime = (UPDATE_INTERVAL * 1000) - updateDuration;
@@ -236,13 +237,13 @@ void connectToWirelessNetwork() {
 
 
 // Helpers
-void blinkLed(uint8_t ledPin, uint8_t count) {
+void blinkLedSynchronous(LED led, uint8_t count) {
     const uint8_t BLINK_INTERVAL = 200;
 
     for (uint8_t blinkIndex = 0; blinkIndex < count; blinkIndex++) {
-        digitalWrite(ledPin, HIGH);
+        led.turnOn();
         delay(BLINK_INTERVAL);
-        digitalWrite(ledPin, LOW);
+        led.turnOff();
 
         // Wait in between blinking
         if (blinkIndex + 1 < count) {
