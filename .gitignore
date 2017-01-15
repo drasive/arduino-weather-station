@@ -286,3 +286,8 @@ build/
 
 ### Arduino ###
 __vm/
+
+
+### Visual Studio Project ###
+*.sln
+*.vcxproj
