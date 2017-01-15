@@ -64,6 +64,7 @@ void loop() {
     // TODO: Output data to LCD
 
     // Log sensor data
+    bool dataLoggingSuccessful = false;
     if (LOG_DATA && sensorReadingSuccessful) {
         Serial.println("Logging data");
 
@@ -71,7 +72,6 @@ void loop() {
             connectToWirelessNetwork();
         }
 
-        bool dataLoggingSuccessful = false;
         if (WiFi.status() == WL_CONNECTED) {
             dataLoggingSuccessful = writeToThingSpeak(temperature, humidity);
         }
@@ -85,23 +85,32 @@ void loop() {
     }
 
     Serial.println();
-    // TODO: Introduce "failing" status when last update was not successful
-	statusLed.turnOff(); // Device idle
 
     // Wait for next update
-	uint32_t updateEnd = millis();
-	uint32_t updateDuration = NULL;
-	if (updateEnd > updateStart) {
-		updateDuration = updateEnd - updateStart;
-	}
-	else {
-		// millis() overflow occured
-		// Code assumes that a single update takes less than UINT32_MAX milliseconds
-		// Warning: This code path has never been tested
-		updateDuration = (UINT32_MAX - updateStart) + updateEnd;
-	}
-	uint32_t waitTime = (UPDATE_INTERVAL * 1000) - updateDuration;
-    delay(waitTime);
+    if (!sensorReadingSuccessful || (LOG_DATA && !dataLoggingSuccessful)) {
+        statusLed.blink(1000); // Device failing
+    }
+    else {
+        statusLed.turnOff(); // Device idle
+    }
+
+    uint32_t timeSinceLastUpdate = NULL;
+    do {
+        uint32_t now = millis();
+        if (now > updateStart) {
+            timeSinceLastUpdate = now - updateStart;
+        }
+        else {
+            // millis() overflow occured
+            // Code assumes that a single update takes less than UINT32_MAX milliseconds
+            // Warning: This code path has never been tested
+            timeSinceLastUpdate = (UINT32_MAX - updateStart) + now;
+        }
+
+        statusLed.update();
+
+        delay(100);
+    } while (timeSinceLastUpdate <= UPDATE_INTERVAL * 1000);
 }
 
 
