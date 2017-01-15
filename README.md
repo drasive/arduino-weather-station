@@ -18,7 +18,7 @@ Logging data successful
 ```
 
 ## Configuration
-The configuration values are found at the top of [arduino-weather-station.ino](/src/arduino-weather-station.ino).  
+The configuration values are found at the top of [arduino-weather-station.ino](/arduino-weather-station/arduino-weather-station.ino).  
 A value in angled brackets ([]) indicates an external constant, a slash (-) indicates no value.
 
 Name                  | Type     | Default Value   | Description
