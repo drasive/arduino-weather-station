@@ -54,6 +54,7 @@ void setup() {
 
 void loop() {
     digitalWrite(LED_PIN, HIGH); // Device active
+	uint32_t updateStart = millis();
 
     // Read sensor data
     float temperature = NAN;
@@ -88,8 +89,18 @@ void loop() {
     digitalWrite(LED_PIN, LOW); // Device idle
 
     // Wait for next update
-    // TODO: Subtract runtime of last iteration
-    delay(UPDATE_INTERVAL * 1000);
+	uint32_t updateEnd = millis();
+	uint32_t updateDuration = NULL;
+	if (updateEnd > updateStart) {
+		updateDuration = updateEnd - updateStart;
+	}
+	else {
+		// Overflow occured
+		// Assuming a single update takes less than UINT32_MAX milliseconds
+		updateDuration = (UINT32_MAX - updateStart) + updateEnd;
+	}
+	uint32_t waitTime = (UPDATE_INTERVAL * 1000) - updateDuration;
+    delay(waitTime);
 }
 
 

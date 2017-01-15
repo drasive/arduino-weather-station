@@ -48,7 +48,7 @@ The following states are communicated using the onboard LED:
 - Initializing: LED is off (after turning the device on)
 - Initialized:  LED blinks three times (after initializing)
 - Active:       LED is on (reading or logging sensor values)
-- Idle:         LED is off (between updates)
+- Idle:         LED is off (waiting for next update)
 
 ### Data Logging (ThingSpeak)
 If turned on (`LOG_DATA`), the temperature and humidity readings will be send to your [ThingSpeak](https://thingspeak.com/) account.  
