@@ -56,6 +56,9 @@ The following states are communicated using the onboard LED:
 If turned on (`LOG_DATA`), the temperature and humidity readings will be send to your [Ubidots](https://ubidots.com/) account.  
 This requires an active network connection (`WLAN_SSID` and `WLAN_PASSWORD`), a Ubidots token (`UBIDOTS_TOKEN`) and the data source IDs (`UBIDOTS_ID_TEMPERATURE` and `UBIDOTS_ID_HUMIDITY`) to be configured.
 
+### Data Logging (ThingSpeak)
+Logging data to ThingSpeak was removed in commit #147cc09 because it was not reliable.
+
 ### Serial Bus
 All actions are communicated through the serial interface. This can be used for wired operation or debugging.
 

@@ -48,7 +48,7 @@ void setup() {
     weatherSensor.begin();
 
     blinkLedSynchronous(statusLed, 3); // Device initialized
-    Serial.println("arduino-weather-station v1.2.0 (https://github.com/drasive/arduino-weather-station)");
+    Serial.println("arduino-weather-station v1.3.0 (https://github.com/drasive/arduino-weather-station)");
     Serial.println("Initialization successful\n");
     delay(1 * 1000);
 }
@@ -166,6 +166,7 @@ bool writeToUbidots(float temperature, float humidity) {
 
     Serial.println("Writing to Ubidots");
 
+	// TODO: Use better library
 	Ubidots ubidots = Ubidots((char*)UBIDOTS_TOKEN, "things.ubidots.com");
     for (int dataLoggingAttempt = 0; dataLoggingAttempt < DATA_LOGGING_ATTEMPTS; dataLoggingAttempt++) {
 		ubidots.add((char*)UBIDOTS_ID_TEMPERATURE, temperature);
