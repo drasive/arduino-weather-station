@@ -12,8 +12,8 @@ Reading sensor data successful (temperature: 22.30°C, humidity: 49.80%)
 Logging data
 Connecting to WLAN "Arduino (2.4 GHz)"
 Connecting to WLAN "Arduino (2.4 GHz)" successful (192.168.0.228, -69 dBm)
-Writing to ThingSpeak #12345
-Writing to ThingSpeak #12345 successful
+Writing to Ubidots
+Writing to Ubidots successful
 Logging data successful
 ```
 
@@ -21,17 +21,18 @@ Logging data successful
 The configuration values are found at the top of [arduino-weather-station.ino](/arduino-weather-station/arduino-weather-station.ino).  
 A value in angled brackets ([]) indicates an external constant, a slash (-) indicates no value.
 
-Name                  | Type     | Default Value   | Description
-----------------------|----------|-----------------|------------
-LED_PIN               | uint8_t  | [LED_BUILTIN]   | Pin of the status LED
-DHT_PIN               | uint8_t  | 5               | Data pin of the DHT sensor
-DHT_TYPE              | uint8_t  | [DHT22]         | Type of the DTH sensor
-UPDATE_INTERVAL       | uint32_t | 5 * 60          | Update interval in seconds (not guaranteed to be achieved)
-LOG_DATA              | bool     | false           | Log the recorded data to ThingSpeak
-WLAN_SSID             | char*    | -               | WLAN SSID
-WLAN_PASSWORD         | char*    | -               | WLAN Password (secret)
-THINGSPEAK_CHANNEL_ID | uint32_t | -               | ThingSpeak channel ID
-THINGSPEAK_API_KEY    | char*    | -               | ThingSpeak write API key (secret)
+Name                   | Type     | Default Value   | Description
+-----------------------|----------|-----------------|------------
+LED_PIN                | uint8_t  | [LED_BUILTIN]   | Pin of the status LED
+DHT_PIN                | uint8_t  | 5               | Data pin of the DHT sensor
+DHT_TYPE               | uint8_t  | [DHT22]         | Type of the DTH sensor
+UPDATE_INTERVAL        | uint32_t | 5 * 60          | Update interval in seconds (not guaranteed to be achieved)
+LOG_DATA               | bool     | false           | Log the recorded data to Ubidots
+WLAN_SSID              | char*    | -               | WLAN SSID
+WLAN_PASSWORD          | char*    | -               | WLAN Password (secret)
+UBIDOTS_TOKEN          | char*    | -               | Ubidots token (secret)
+UBIDOTS_ID_TEMPERATURE | char*    | -               | Ubidots temperature source id
+UBIDOTS_ID_HUMIDITY    | char*    | -               | Ubidots humidity source id
 
 ## Hardware
 - 1x Arduino MKR1000 (WiFi101 Firmware v19.4.4)
@@ -51,9 +52,9 @@ The following states are communicated using the onboard LED:
 - Idle:         LED is off (waiting for next update)
 - Failing:      LED blinks (last update failed)
 
-### Data Logging (ThingSpeak)
-If turned on (`LOG_DATA`), the temperature and humidity readings will be send to your [ThingSpeak](https://thingspeak.com/) account.  
-This requires an active network connection (`WLAN_SSID` and `WLAN_PASSWORD`) and a ThingSpeak channel (`THINGSPEAK_CHANNEL_ID` and `THINGSPEAK_API_KEY`) to be configured with the temparature as field 1 and the humidity as field 2.
+### Data Logging (Ubidots)
+If turned on (`LOG_DATA`), the temperature and humidity readings will be send to your [Ubidots](https://ubidots.com/) account.  
+This requires an active network connection (`WLAN_SSID` and `WLAN_PASSWORD`), a Ubidots token (`UBIDOTS_TOKEN`) and the data source IDs (`UBIDOTS_ID_TEMPERATURE` and `UBIDOTS_ID_HUMIDITY`) to be configured.
 
 ### Serial Bus
 All actions are communicated through the serial interface. This can be used for wired operation or debugging.
@@ -65,7 +66,7 @@ If reading any sensor, connecting to the network or logging data fails, it is re
 - SPI v1.0.0 by Arduino
 - WiFi101 v0.12.0 by Arduino
 - [DHT v1.3.0 by Adafruit](https://github.com/adafruit/DHT-sensor-library) (external)
-- [ThingSpeak v1.2.1 by MathWorks](https://github.com/mathworks/thingspeak-arduino) (external)
+- [UbidotsArduino #2803d20 by Ubidots](https://github.com/ubidots/ubidots-arduino-wifi) (external)
 
 ## License
 [MIT](/LICENSE)

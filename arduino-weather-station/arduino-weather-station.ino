@@ -10,7 +10,7 @@
 #include <SPI.h>
 #include <WiFi101.h>
 #include <DHT.h>
-#include <ThingSpeak.h>
+#include <UbidotsArduino.h>
 #include "LED.h"
 
 // Configuration
@@ -24,8 +24,9 @@ const uint32_t UPDATE_INTERVAL = 5 * 60;  // Update interval in seconds (not gua
 const bool LOG_DATA = false;              // Log the recorded data to ThingSpeak
 const char* WLAN_SSID = "";               // WLAN SSID
 const char* WLAN_PASSWORD = "";           // WLAN Password (secret)
-const uint32_t THINGSPEAK_CHANNEL_ID = 0; // ThingSpeak channel ID
-const char* THINGSPEAK_API_KEY = "";      // ThingSpeak write API key (secret)
+const char* UBIDOTS_TOKEN = "";           // Ubidots token (secret)
+const char* UBIDOTS_ID_TEMPERATURE = "";  // Ubidots temperature source id
+const char* UBIDOTS_ID_HUMIDITY = "";     // Ubidots humidity source id
 
 
 // Initialization
@@ -73,7 +74,7 @@ void loop() {
         }
 
         if (WiFi.status() == WL_CONNECTED) {
-            dataLoggingSuccessful = writeToThingSpeak(temperature, humidity);
+            dataLoggingSuccessful = writeToUbidots(temperature, humidity);
         }
 
         if (dataLoggingSuccessful) {
@@ -159,34 +160,25 @@ bool readSensorData(float* temperature, float* humidity) {
     return false;
 }
 
-bool writeToThingSpeak(float temperature, float humidity) {
+bool writeToUbidots(float temperature, float humidity) {
     const uint8_t DATA_LOGGING_ATTEMPTS = 3;
     const uint8_t DATA_LOGGING_INTERVAL = 5 * 1000;
 
-    Serial.print("Writing to ThingSpeak #");
-    Serial.println(THINGSPEAK_CHANNEL_ID);
+    Serial.println("Writing to Ubidots");
 
-    uint8_t writeStatus = 0;
+	Ubidots ubidots = Ubidots((char*)UBIDOTS_TOKEN, "things.ubidots.com");
     for (int dataLoggingAttempt = 0; dataLoggingAttempt < DATA_LOGGING_ATTEMPTS; dataLoggingAttempt++) {
-        WiFiClient client;
-        ThingSpeak.begin(client);
+		ubidots.add((char*)UBIDOTS_ID_TEMPERATURE, temperature);
+		ubidots.add((char*)UBIDOTS_ID_HUMIDITY, humidity);
 
-        ThingSpeak.setField(1, temperature);
-        ThingSpeak.setField(2, humidity);
-        writeStatus = ThingSpeak.writeFields(THINGSPEAK_CHANNEL_ID, THINGSPEAK_API_KEY);
+		bool writeSuccessful = ubidots.sendAll();
 
-        if (writeStatus == OK_SUCCESS) {
-            Serial.print("Writing to ThingSpeak #");
-            Serial.print(THINGSPEAK_CHANNEL_ID);
-            Serial.println(" successful");
-
+        if (writeSuccessful) {
+            Serial.println("Writing to Ubidots successful");
             return true;
         }
 
-        Serial.print("Writing to ThingSpeak #");
-        Serial.print(THINGSPEAK_CHANNEL_ID);
-        Serial.print(" failed: Error ");
-        Serial.println(writeStatus);
+        Serial.println("Writing to Ubidots failed");
 
         // Wait in between attempts
         if (dataLoggingAttempt + 1 < DATA_LOGGING_ATTEMPTS) {
