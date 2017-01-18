@@ -26,6 +26,7 @@ Name                   | Type     | Default Value   | Description
 LED_PIN                | uint8_t  | [LED_BUILTIN]   | Pin of the status LED
 DHT_PIN                | uint8_t  | 5               | Data pin of the DHT sensor
 DHT_TYPE               | uint8_t  | [DHT22]         | Type of the DTH sensor
+PHOTORESISTOR_PIN      | uint8_t  | 1               | Pin of the photoresistor
 UPDATE_INTERVAL        | uint32_t | 5 * 60          | Update interval in seconds (not guaranteed to be achieved)
 LOG_DATA               | bool     | false           | Log the recorded data to Ubidots
 WLAN_SSID              | char*    | -               | WLAN SSID
@@ -33,15 +34,20 @@ WLAN_PASSWORD          | char*    | -               | WLAN Password (secret)
 UBIDOTS_TOKEN          | char*    | -               | Ubidots token (secret)
 UBIDOTS_ID_TEMPERATURE | char*    | -               | Ubidots temperature source id
 UBIDOTS_ID_HUMIDITY    | char*    | -               | Ubidots humidity source id
+UBIDOTS_ID_BRIGHTNESS  | char*    | -               | Ubidots brightness source id
 
 ## Hardware
 - 1x Arduino MKR1000 (WiFi101 Firmware v19.4.4)
 - 1x DHT22 sensor
 - 1x Resistor 10 kR
 
-[Breadboard Version](/circuit/Breadboard.png)
+Optional:
+- 1x Photoresistor
+- 1x Resistor 10 kR
 
-![Circuit](/circuit/Circuit.png)
+![Breadboard](/circuit/Breadboard.png)
+
+[Circuit - without Photoresistor](/circuit/Circuit - without Photoresistor.png)
 
 ## Documentation
 ### Status LED
@@ -52,6 +58,9 @@ The following states are communicated using the onboard LED:
 - Idle:         LED is off (waiting for next update)
 - Failing:      LED blinks (last update failed)
 
+### Serial Bus
+All actions are communicated through the serial interface. This can be used for wired operation or debugging.
+
 ### Data Logging (Ubidots)
 If turned on (`LOG_DATA`), the temperature and humidity readings will be send to your [Ubidots](https://ubidots.com/) account.  
 This requires an active network connection (`WLAN_SSID` and `WLAN_PASSWORD`), a Ubidots token (`UBIDOTS_TOKEN`) and the data source IDs (`UBIDOTS_ID_TEMPERATURE` and `UBIDOTS_ID_HUMIDITY`) to be configured.
@@ -59,11 +68,11 @@ This requires an active network connection (`WLAN_SSID` and `WLAN_PASSWORD`), a 
 ### Data Logging (ThingSpeak)
 Logging data to ThingSpeak was removed in commit #147cc09 because it was not reliable.
 
-### Serial Bus
-All actions are communicated through the serial interface. This can be used for wired operation or debugging.
-
 ### Failing to read/ log data
 If reading any sensor, connecting to the network or logging data fails, it is retried for up to a total of three times.
+
+### Photoresistor
+If you don't want to use a photoresistor, revert the changes of commit #a100466 or remove the corresponding code.
 
 ## Libraries
 - SPI v1.0.0 by Arduino
