@@ -13,11 +13,13 @@
 #include <UbidotsArduino.h>
 #include "LED.h"
 
+
 // Configuration
 const uint8_t LED_PIN = LED_BUILTIN;      // Pin of the status LED
 
 const uint8_t DHT_PIN = 5;                // Data pin of the DHT sensor
 const uint8_t DHT_TYPE = DHT22;           // Type of the DTH sensor
+const uint8_t PHOTORESISTOR_PIN = 1;      // Pin of the photoresistor
 const uint32_t UPDATE_INTERVAL = 5 * 60;  // Update interval in seconds (not guaranteed to be achieved)
 
 const bool LOG_DATA = false;              // Log the recorded data to ThingSpeak
@@ -26,6 +28,7 @@ const char* WLAN_PASSWORD = "";           // WLAN Password (secret)
 const char* UBIDOTS_TOKEN = "";           // Ubidots token (secret)
 const char* UBIDOTS_ID_TEMPERATURE = "";  // Ubidots temperature source id
 const char* UBIDOTS_ID_HUMIDITY = "";     // Ubidots humidity source id
+const char* UBIDOTS_ID_BRIGHTNESS = "";   // Ubidots brightness source id
 
 
 // Initialization
@@ -59,7 +62,8 @@ void loop() {
     // Read sensor data
     float temperature = NAN;
     float humidity = NAN;
-    bool sensorReadingSuccessful = readSensorData(&temperature, &humidity);
+    uint16_t brightness = NAN;
+    bool sensorReadingSuccessful = readSensorData(&temperature, &humidity, &brightness);
 
     // Log sensor data
     bool dataLoggingSuccessful = false;
@@ -71,7 +75,7 @@ void loop() {
         }
 
         if (WiFi.status() == WL_CONNECTED) {
-            dataLoggingSuccessful = writeToUbidots(temperature, humidity);
+            dataLoggingSuccessful = writeToUbidots(temperature, humidity, brightness);
         }
 
         if (dataLoggingSuccessful) {
@@ -113,7 +117,7 @@ void loop() {
 
 
 // Methods
-bool readSensorData(float* temperature, float* humidity) {
+bool readSensorData(float* temperature, float* humidity, uint16_t* brightness) {
     const uint8_t SENSOR_READING_ATTEMPTS = 3;
     const uint8_t SENSOR_READING_INTERVAL = 3 * 1000;
 
@@ -122,16 +126,20 @@ bool readSensorData(float* temperature, float* humidity) {
     for (uint8_t sensorReadAttempt = 0; sensorReadAttempt < SENSOR_READING_ATTEMPTS; sensorReadAttempt++) {
         *temperature = weatherSensor.readTemperature(false, false);
         *humidity = weatherSensor.readHumidity(false);
+        *brightness = analogRead(PHOTORESISTOR_PIN);
 
         bool isTemperatureValid = !isnan(*temperature) && *temperature >= -40.0 && *temperature <= 80.0;
         bool isHumidityValid = !isnan(*humidity) && *humidity >= 0.0 && *humidity <= 100.0;
+        bool isBrightnessValid = !isnan(*brightness) && *brightness >= 0 && *brightness <= 1023;
 
-        if (isTemperatureValid && isHumidityValid) {
+        if (isTemperatureValid && isHumidityValid && isBrightnessValid) {
             Serial.print("Reading sensor data successful (temperature: ");
             Serial.print(*temperature);
             Serial.print("°C, humidity: ");
             Serial.print(*humidity);
-            Serial.println("%)");
+            Serial.print("%, brightness: ");
+            Serial.print(*brightness);
+            Serial.println(")");
 
             return true;
         }
@@ -143,6 +151,10 @@ bool readSensorData(float* temperature, float* humidity) {
         if (!isHumidityValid) {
             Serial.print("Reading valid humidity failed: ");
             Serial.println(*humidity);
+        }
+        if (!isBrightnessValid) {
+            Serial.print("Reading valid brightness failed: ");
+            Serial.println(*brightness);
         }
 
         // Wait in between attempts
@@ -157,18 +169,19 @@ bool readSensorData(float* temperature, float* humidity) {
     return false;
 }
 
-bool writeToUbidots(float temperature, float humidity) {
+bool writeToUbidots(float temperature, float humidity, uint16_t brightness) {
     const uint8_t DATA_LOGGING_ATTEMPTS = 3;
     const uint8_t DATA_LOGGING_INTERVAL = 5 * 1000;
 
     Serial.println("Writing to Ubidots");
 
-	Ubidots ubidots = Ubidots((char*)UBIDOTS_TOKEN, "things.ubidots.com");
+    Ubidots ubidots = Ubidots((char*)UBIDOTS_TOKEN, "things.ubidots.com");
     for (int dataLoggingAttempt = 0; dataLoggingAttempt < DATA_LOGGING_ATTEMPTS; dataLoggingAttempt++) {
-		ubidots.add((char*)UBIDOTS_ID_TEMPERATURE, temperature);
-		ubidots.add((char*)UBIDOTS_ID_HUMIDITY, humidity);
+        ubidots.add((char*)UBIDOTS_ID_TEMPERATURE, temperature);
+        ubidots.add((char*)UBIDOTS_ID_HUMIDITY, humidity);
+        ubidots.add((char*)UBIDOTS_ID_BRIGHTNESS, brightness);
 
-		bool writeSuccessful = ubidots.sendAll();
+        bool writeSuccessful = ubidots.sendAll();
 
         if (writeSuccessful) {
             Serial.println("Writing to Ubidots successful");
