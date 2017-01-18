@@ -14,7 +14,6 @@
 #include "LED.h"
 
 // Configuration
-// TODO: Find way to remove sensitive data from code file
 const uint8_t LED_PIN = LED_BUILTIN;      // Pin of the status LED
 
 const uint8_t DHT_PIN = 5;                // Data pin of the DHT sensor
@@ -61,8 +60,6 @@ void loop() {
     float temperature = NAN;
     float humidity = NAN;
     bool sensorReadingSuccessful = readSensorData(&temperature, &humidity);
-
-    // TODO: Output data to LCD
 
     // Log sensor data
     bool dataLoggingSuccessful = false;
@@ -166,7 +163,6 @@ bool writeToUbidots(float temperature, float humidity) {
 
     Serial.println("Writing to Ubidots");
 
-	// TODO: Use better library
 	Ubidots ubidots = Ubidots((char*)UBIDOTS_TOKEN, "things.ubidots.com");
     for (int dataLoggingAttempt = 0; dataLoggingAttempt < DATA_LOGGING_ATTEMPTS; dataLoggingAttempt++) {
 		ubidots.add((char*)UBIDOTS_ID_TEMPERATURE, temperature);

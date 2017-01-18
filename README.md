@@ -71,5 +71,13 @@ If reading any sensor, connecting to the network or logging data fails, it is re
 - [DHT v1.3.0 by Adafruit](https://github.com/adafruit/DHT-sensor-library) (external)
 - [UbidotsArduino #2803d20 by Ubidots](https://github.com/ubidots/ubidots-arduino-wifi) (external)
 
+## Feature Ideas
+1. Support humidity sensor: Planned by the end of January 2016
+1. Support LCD panel: Planned by the end of January 2016
+1. Exclude sensitive data from repository: Not worth the effort
+1. Keep hisotry of most recent sensor readings: Not worth the effort as long as network connecting works reliably
+1. Use better library for uploading to Ubidots: Not worth the effort as long as UbidotsArduino works reliably
+1. Add command/ button to force update: Not worth the complexity and effort
+
 ## License
 [MIT](/LICENSE)
