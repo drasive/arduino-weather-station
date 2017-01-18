@@ -47,7 +47,7 @@ Optional:
 
 ![Breadboard](/circuit/Breadboard.png)
 
-[Circuit - without Photoresistor](/circuit/Circuit - without Photoresistor.png)
+[Circuit Version (without Photoresistor)](/circuit/Circuit - without Photoresistor.png)
 
 ## Documentation
 ### Status LED
@@ -81,7 +81,6 @@ If you don't want to use a photoresistor, revert the changes of commit #a100466 
 - [UbidotsArduino #2803d20 by Ubidots](https://github.com/ubidots/ubidots-arduino-wifi) (external)
 
 ## Feature Ideas
-1. Support humidity sensor: Planned by the end of January 2016
 1. Support LCD panel: Planned by the end of January 2016
 1. Exclude sensitive data from repository: Not worth the effort
 1. Keep hisotry of most recent sensor readings: Not worth the effort as long as network connecting works reliably
