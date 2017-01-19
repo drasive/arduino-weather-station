@@ -82,6 +82,7 @@ If you don't want to use a photoresistor, revert the changes of commit #a100466 
 
 ## Feature Ideas
 1. Support LCD panel: Planned by the end of January 2016
+1. Support barometer: Planned by the end of February 2016
 1. Exclude sensitive data from repository: Not worth the effort
 1. Keep hisotry of most recent sensor readings: Not worth the effort as long as network connecting works reliably
 1. Use better library for uploading to Ubidots: Not worth the effort as long as UbidotsArduino works reliably
