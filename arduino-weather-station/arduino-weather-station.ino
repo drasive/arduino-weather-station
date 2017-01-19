@@ -133,6 +133,8 @@ bool readSensorData(float* temperature, float* humidity, uint16_t* brightness) {
         bool isBrightnessValid = !isnan(*brightness) && *brightness >= 0 && *brightness <= 1023;
 
         if (isTemperatureValid && isHumidityValid && isBrightnessValid) {
+            *brightness = 1023 - *brightness;
+
             Serial.print("Reading sensor data successful (temperature: ");
             Serial.print(*temperature);
             Serial.print("°C, humidity: ");
@@ -165,6 +167,7 @@ bool readSensorData(float* temperature, float* humidity, uint16_t* brightness) {
 
     *temperature = NAN;
     *humidity = NAN;
+    *brightness = NAN;
     Serial.print("Reading sensor data failed");
     return false;
 }
