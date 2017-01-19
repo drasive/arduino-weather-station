@@ -8,7 +8,7 @@ arduino-weather-station v1.0.0 (https://github.com/drasive/arduino-weather-stati
 Initialization successful
 
 Reading sensor data
-Reading sensor data successful (temperature: 22.30°C, humidity: 49.80%)
+Reading sensor data successful (temperature: 22.30°C, humidity: 49.80%, brightness: 650)
 Logging data
 Connecting to WLAN "Arduino (2.4 GHz)"
 Connecting to WLAN "Arduino (2.4 GHz)" successful (192.168.0.228, -69 dBm)
@@ -50,6 +50,11 @@ Optional:
 [Circuit Version (without Photoresistor)](/circuit/Circuit - without Photoresistor.png)
 
 ## Documentation
+### Sensor Data
+Temperature: -40 to +80 degrees Celsius  
+Humidity: 0% to 100%  
+Brightness: 0 to 1023 (higher value means brighter)
+
 ### Status LED
 The following states are communicated using the onboard LED:
 - Initializing: LED is off (after turning the device on)
@@ -72,7 +77,8 @@ Logging data to ThingSpeak was removed in commit #147cc09 because it was not rel
 If reading any sensor, connecting to the network or logging data fails, it is retried for up to a total of three times.
 
 ### Photoresistor
-If you don't want to use a photoresistor, revert the changes of commit #a100466 or remove the corresponding code.
+If you don't want to use a photoresistor), revert the changes of commit #a100466 or remove the corresponding code.  
+There is no configuration option to disable reading or logging only the brightness value.
 
 ## Libraries
 - SPI v1.0.0 by Arduino
