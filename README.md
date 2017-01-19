@@ -26,7 +26,7 @@ Name                   | Type     | Default Value   | Description
 LED_PIN                | uint8_t  | [LED_BUILTIN]   | Pin of the status LED
 DHT_PIN                | uint8_t  | 5               | Data pin of the DHT sensor
 DHT_TYPE               | uint8_t  | [DHT22]         | Type of the DTH sensor
-PHOTORESISTOR_PIN      | uint8_t  | 1               | Pin of the photoresistor
+PHOTORESISTOR_PIN      | uint8_t  | PIN_A0          | Pin of the photoresistor
 UPDATE_INTERVAL        | uint32_t | 5 * 60          | Update interval in seconds (not guaranteed to be achieved)
 LOG_DATA               | bool     | false           | Log the recorded data to Ubidots
 WLAN_SSID              | char*    | -               | WLAN SSID

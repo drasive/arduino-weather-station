@@ -19,7 +19,7 @@ const uint8_t LED_PIN = LED_BUILTIN;      // Pin of the status LED
 
 const uint8_t DHT_PIN = 5;                // Data pin of the DHT sensor
 const uint8_t DHT_TYPE = DHT22;           // Type of the DTH sensor
-const uint8_t PHOTORESISTOR_PIN = 1;      // Pin of the photoresistor
+const uint8_t PHOTORESISTOR_PIN = PIN_A0; // Pin of the photoresistor
 const uint32_t UPDATE_INTERVAL = 5 * 60;  // Update interval in seconds (not guaranteed to be achieved)
 
 const bool LOG_DATA = false;              // Log the recorded data to ThingSpeak
@@ -50,7 +50,7 @@ void setup() {
     weatherSensor.begin();
 
     blinkLedSynchronous(statusLed, 3); // Device initialized
-    Serial.println("arduino-weather-station v1.4.0 (https://github.com/drasive/arduino-weather-station)");
+    Serial.println("arduino-weather-station v1.4.1 (https://github.com/drasive/arduino-weather-station)");
     Serial.println("Initialization successful\n");
     delay(1 * 1000);
 }
