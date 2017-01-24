@@ -42,9 +42,6 @@ void setup() {
 
     // Initialize serial port
     Serial.begin(9600);
-    while (!Serial) {
-        ; // Wait for serial port to connect. Needed for native USB (32u4 based boards)
-    }
 
     // Initialize weather sensor
     weatherSensor.begin();
