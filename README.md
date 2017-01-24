@@ -57,7 +57,7 @@ Brightness: 0 to 1023 (higher value means brighter)
 
 ### Status LED
 The following states are communicated using the onboard LED:
-- Initializing: LED is off (after turning the device on)
+- Initializing: LED is on (after turning the device on)
 - Initialized:  LED blinks three times (after initializing)
 - Active:       LED is on (reading or logging sensor values)
 - Idle:         LED is off (waiting for next update)

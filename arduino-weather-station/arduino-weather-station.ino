@@ -38,7 +38,7 @@ DHT weatherSensor = DHT(DHT_PIN, DHT_TYPE);
 
 // Main
 void setup() {
-    statusLed.turnOff(); // Device initializing
+    statusLed.turnOn(); // Device initializing
 
     // Initialize serial port
     Serial.begin(9600);
